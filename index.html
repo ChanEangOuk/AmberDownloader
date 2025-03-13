@@ -73,23 +73,23 @@
             }
 
             try {
-                // Simulate a request to a third-party API (replace with actual API endpoint)
-                const apiUrl = `https://api.y2mate.is/en55/api/ajax.php?url=${encodeURIComponent(videoUrl)}`;
+                // Use yt-download.org API
+                const apiUrl = `https://yt-download.org/api/json/${encodeURIComponent(videoUrl)}`;
                 const response = await fetch(apiUrl);
                 if (!response.ok) {
                     throw new Error("Failed to fetch video details.");
                 }
 
                 const data = await response.json();
-                if (data.status !== 'success') {
-                    messageElement.textContent = "Invalid YouTube URL or unable to process.";
+                if (data.error) {
+                    messageElement.textContent = data.error;
                     messageElement.style.display = "block";
                     messageElement.classList.add("error");
                     return;
                 }
 
                 // Extract the download link from the API response
-                const downloadUrl = data.result[0].link; // Adjust index based on quality
+                const downloadUrl = data.url; // Adjust based on quality
                 downloadLinkElement.href = downloadUrl;
                 downloadLinkElement.style.display = "block";
                 messageElement.textContent = "Download link generated successfully!";
